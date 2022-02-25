@@ -1,2 +1,2 @@
 # Pologony
-The Raccoons Winter Hackathon 2022 Entry
+Chronos entry into the Raccoons Winter Hackathon 2022 
