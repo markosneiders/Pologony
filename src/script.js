@@ -292,7 +292,6 @@ const tick = () => {
 		}
 		if (moveCount == moveThreshold - 1) {
 			moveHang = true;
-			console.log(moveHang);
 		}
 		moveCount++;
 		canMove = 10;
