@@ -65,17 +65,14 @@ let score = 0;
 
 var bullets = [];
 var bulletLifetime = 5000;
-var bulletVelocity = 0.1;
+var bulletVelocity = 0.5;
 var enemies = [];
 var enemyScale = 0.5;
 
 // Lights
 
-const pointLight = new THREE.PointLight(0xffffff, 0.1);
-pointLight.position.x = 2;
-pointLight.position.y = 3;
-pointLight.position.z = 4;
-scene.add(pointLight);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight);
 
 /**
  * Sizes
@@ -195,7 +192,7 @@ const tick = () => {
 		});
 		// creates a bullet as a Mesh object
 		var bullet = new THREE.Mesh(
-			new THREE.SphereGeometry(0.05, 8, 8),
+			new THREE.BoxGeometry(0.1, 0.1, 1),
 			new THREE.MeshBasicMaterial({ color: 0xff0000 })
 		);
 
@@ -207,9 +204,6 @@ const tick = () => {
 
 		bullet.raycast;
 
-		// after 1000ms, set alive to false and remove from scene
-		// setting alive to false flags our update code to remove
-		// the bullet from the bullets array
 		bullet.alive = true;
 		setTimeout(function () {
 			bullet.alive = false;
