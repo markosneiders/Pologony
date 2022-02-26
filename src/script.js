@@ -4,7 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "dat.gui";
 
 // Debug
-//const gui = new dat.GUI();
+const gui = new dat.GUI();
 
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
@@ -41,22 +41,22 @@ scene.add(pointLight);
  * Sizes
  */
 const sizes = {
-	width: window.innerWidth,
-	height: window.innerHeight,
+  width: window.innerWidth,
+  height: window.innerHeight,
 };
 
 window.addEventListener("resize", () => {
-	// Update sizes
-	sizes.width = window.innerWidth;
-	sizes.height = window.innerHeight;
+  // Update sizes
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
 
-	// Update camera
-	camera.aspect = sizes.width / sizes.height;
-	camera.updateProjectionMatrix();
+  // Update camera
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
 
-	// Update renderer
-	renderer.setSize(sizes.width, sizes.height);
-	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  // Update renderer
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
 /**
@@ -64,10 +64,10 @@ window.addEventListener("resize", () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(
-	75,
-	sizes.width / sizes.height,
-	0.1,
-	100
+  75,
+  sizes.width / sizes.height,
+  0.1,
+  100
 );
 camera.position.x = 0;
 camera.position.y = 10;
@@ -94,7 +94,8 @@ document.addEventListener("keyup", onDocumentKeyUp, false);
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
-	canvas: canvas,
+  canvas: canvas,
+  alpha: true,
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -106,69 +107,69 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const clock = new THREE.Clock();
 
 const tick = () => {
-	const elapsedTime = clock.getElapsedTime();
+  const elapsedTime = clock.getElapsedTime();
 
-	// Update objects
-	// player.rotation.y = 0.1 * elapsedTime;
-	// player.rotation.x = 0.1 * elapsedTime;
-	player.position.x += xMove;
+  // Update objects
+  // player.rotation.y = 0.1 * elapsedTime;
+  // player.rotation.x = 0.1 * elapsedTime;
+  player.position.x += xMove;
 
-	if (player.rotation.z > maxRThreshold) {
-		player.rotation.z -= rSpeed;
-	} else if (player.rotation.z < minRThreshold) {
-		player.rotation.z += rSpeed;
-	}
-	if (player.rotation.z > 0 && rMove == 0) {
-		player.rotation.z -= rReturnSpeed;
-	} else if (player.rotation.z < 0 && rMove == 0) {
-		player.rotation.z += rReturnSpeed;
-	}
-	if (player.rotation.z < 1 && player.rotation.z > -1) {
-		player.rotation.z += rMove;
-	}
+  if (player.rotation.z > maxRThreshold) {
+    player.rotation.z -= rSpeed;
+  } else if (player.rotation.z < minRThreshold) {
+    player.rotation.z += rSpeed;
+  }
+  if (player.rotation.z > 0 && rMove == 0) {
+    player.rotation.z -= rReturnSpeed;
+  } else if (player.rotation.z < 0 && rMove == 0) {
+    player.rotation.z += rReturnSpeed;
+  }
+  if (player.rotation.z < 1 && player.rotation.z > -1) {
+    player.rotation.z += rMove;
+  }
 
-	// Update Orbital Controls
-	//controls.update();
+  // Update Orbital Controls
+  //controls.update();
 
-	// Render
-	renderer.render(scene, camera);
+  // Render
+  renderer.render(scene, camera);
 
-	// Call tick again on the next frame
-	window.requestAnimationFrame(tick);
+  // Call tick again on the next frame
+  window.requestAnimationFrame(tick);
 };
 
 function onDocumentKeyDown(event) {
-	var keyCode = event.which;
+  var keyCode = event.which;
 
-	//Movement ifs
-	if (keyCode == 65 && player.position.x > minThreshold) {
-		xMove = -xSpeed;
-	} else if (keyCode == 68 && player.position.x < maxThreshold) {
-		xMove = +xSpeed;
-	} else if (keyCode == 32) {
-		scene.add(bullet);
-	} else {
-		xMove = 0;
-	}
+  //Movement ifs
+  if (keyCode == 65 && player.position.x > minThreshold) {
+    xMove = -xSpeed;
+  } else if (keyCode == 68 && player.position.x < maxThreshold) {
+    xMove = +xSpeed;
+  } else if (keyCode == 32) {
+    scene.add(bullet);
+  } else {
+    xMove = 0;
+  }
 
-	if (keyCode == 65) {
-		rMove = rSpeed;
-	} else if (keyCode == 68) {
-		rMove = -rSpeed;
-	}
+  if (keyCode == 65) {
+    rMove = rSpeed;
+  } else if (keyCode == 68) {
+    rMove = -rSpeed;
+  }
 }
 function onDocumentKeyUp(event) {
-	var keyCode = event.which;
-	if (keyCode == 65 && player.position.x > minThreshold) {
-		xMove = 0;
-	} else if (keyCode == 68 && player.position.x < maxThreshold) {
-		xMove = 0;
-	}
-	if (keyCode == 65) {
-		rMove = 0;
-	} else if (keyCode == 68) {
-		rMove = 0;
-	}
+  var keyCode = event.which;
+  if (keyCode == 65 && player.position.x > minThreshold) {
+    xMove = 0;
+  } else if (keyCode == 68 && player.position.x < maxThreshold) {
+    xMove = 0;
+  }
+  if (keyCode == 65) {
+    rMove = 0;
+  } else if (keyCode == 68) {
+    rMove = 0;
+  }
 }
 
 tick();
