@@ -18,3 +18,31 @@ body {
   left: 0;
   outline: none;
 }
+
+.textscore {
+  color: white;
+  text-align: center;
+  margin-top: 5%;
+  font-family: "arcadeclassicregular";
+  font-size: xx-large;
+}
+
+.text {
+  color: white;
+  text-align: center;
+  margin-top: 0%;
+  font-family: "arcadeclassicregular";
+  font-size: xx-large;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+@font-face {
+  font-family: "arcadeclassicregular";
+  src: url("../arcadeclassic-webfont.woff2");
+}
