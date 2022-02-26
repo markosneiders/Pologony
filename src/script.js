@@ -19,7 +19,7 @@ const loader = new OBJLoader();
 // load a resource
 loader.load(
 	// resource URL
-	"static/models/enemy.obj",
+	"models/enemy.obj",
 	// called when resource is loaded
 	function (object) {
 		scene.add(object);
