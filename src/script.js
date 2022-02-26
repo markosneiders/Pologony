@@ -16,7 +16,6 @@ const scene = new THREE.Scene();
 // Objects Loader
 const loader = new OBJLoader();
 
-// load a resource
 loader.load(
   // resource URL
   "models/enemy.obj",
@@ -105,6 +104,20 @@ camera.position.y = 2;
 camera.position.z = 2;
 scene.add(camera);
 
+//Audio loader
+const listener = new THREE.AudioListener();
+camera.add(listener);
+
+// create a global audio source
+const shootSound = new THREE.Audio(listener);
+
+// load a sound and set it as the Audio object's buffer
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load("sounds/laserSmall_000.ogg", function (buffer) {
+  shootSound.setBuffer(buffer);
+  shootSound.setVolume(0.5);
+});
+
 // Controls
 var pressedKeys = {};
 pressedKeys[68] = false; //set key state at start to avoid funky behaviour from undefined
@@ -119,7 +132,7 @@ var minRThreshold = -0.3; // how far clockwise the player can rotate
 var rSpeed = 0.02; // player rotation speed
 var rReturnSpeed = 0.05; // player rotation return speed
 var canShoot = 0;
-var shootDelay = 1;
+var shootDelay = 0.5; //smaller means longer delay
 
 document.addEventListener("keydown", onDocumentKeyDown, false);
 document.addEventListener("keyup", onDocumentKeyUp, false);
@@ -193,6 +206,7 @@ const tick = () => {
     // add to scene, array, and set the delay to 10 frames
     bullets.push(bullet);
     scene.add(bullet);
+    shootSound.play(); //play shoot sound
     canShoot = 10;
   }
 
@@ -213,9 +227,11 @@ const tick = () => {
     try {
       if (intersects[0].distance < 0.05) {
         //if raycast distance is smaller than bullet radius
+        score += 1;
+        const killSound = intersects[0].object.children[0];
+        killSound.play();
         scene.remove(intersects[0].object);
         scene.remove(bullets[index]);
-        score += 1;
       }
     } catch (err) {
       null;
@@ -256,10 +272,16 @@ function onDocumentKeyUp(event) {
 }
 
 function spawnEnemy() {
-  var enemy = new THREE.Mesh(geometry, enemyMaterial);
-  enemy.position.set(player.position.x, 0, -10);
-  enemies.push(enemy);
-  scene.add(enemy);
+  audioLoader.load("sounds/explosionCrunch_001.ogg", function (buffer) {
+    var enemy = new THREE.Mesh(geometry, enemyMaterial);
+    const killSound = new THREE.Audio(listener);
+    killSound.setBuffer(buffer);
+    killSound.setVolume(0.5);
+    enemy.add(killSound);
+    enemy.position.set(player.position.x, 0, -10);
+    enemies.push(enemy);
+    scene.add(enemy);
+  });
 }
 
 tick();
