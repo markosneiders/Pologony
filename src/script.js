@@ -2,6 +2,7 @@ import "./style.css";
 import * as THREE from "three";
 import * as dat from "dat.gui";
 import { Vector3 } from "three";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 
 //Ray
 const raycaster = new THREE.Raycaster();
@@ -11,6 +12,28 @@ const canvas = document.querySelector("canvas.webgl");
 
 // Scene
 const scene = new THREE.Scene();
+
+// Objects Loader
+const loader = new OBJLoader();
+
+// load a resource
+loader.load(
+  // resource URL
+  "static/models/enemy.obj",
+  // called when resource is loaded
+  function (object) {
+    scene.add(object);
+    console.log(object);
+  },
+  // called when loading is in progresses
+  function (xhr) {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  // called when loading has errors
+  function (error) {
+    console.log("An error happened");
+  }
+);
 
 // Objects
 const geometry = new THREE.BoxGeometry();
