@@ -9,7 +9,31 @@
   </head>
   <body>
     <canvas class="webgl"></canvas>
-    <p class="textscore">Score</p>
-    <p class="text" id="output"></p>
+    <div class="score_area">
+      <p class="textscore">score [1]</p>
+      <p class="text" id="output"></p>
+    </div>
+
+    <div id="menu_area">
+      <div id="menu">
+        <h2>Menu</h2>
+        <ul>
+          <li>Line</li>
+          <li>Line2</li>
+          <li>Line3</li>
+          <li>Line4</li>
+        </ul>
+      </div>
+      <button id="open_menu_btn">Open Menu</button>
+    </div>
+
+    <script>
+      const menuBtn = document.getElementById("open_menu_btn");
+
+      menuBtn.onclick = () => {
+        console.log("hello")
+      }
+    </script>
+    
   </body>
 </html>
