@@ -1,48 +1,48 @@
 * {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 html,
 body {
-  height: 100vh;
-  font-family: "Poppins";
-  background: url("https://wallpaper.dog/large/10777706.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
+	height: 100vh;
+	font-family: "Poppins";
+	background: url("https://wallpaper.dog/large/10777706.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 .webgl {
-  position: fixed;
-  top: 0;
-  left: 0;
-  outline: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	outline: none;
 }
 
 .textscore {
-  color: white;
-  text-align: center;
-  margin-top: 5%;
-  font-family: "arcadeclassicregular";
-  font-size: xx-large;
+	color: white;
+	text-align: center;
+	margin-top: 5%;
+	font-family: "arcadeclassicregular";
+	font-size: xx-large;
 }
 
 .text {
-  color: white;
-  text-align: center;
-  margin-top: 0%;
-  font-family: "arcadeclassicregular";
-  font-size: xx-large;
+	color: white;
+	text-align: center;
+	margin-top: 0%;
+	font-family: "arcadeclassicregular";
+	font-size: xx-large;
 }
 
 html,
 body {
-  margin: 0;
-  height: 100%;
-  overflow: hidden;
+	margin: 0;
+	height: 100%;
+	overflow: hidden;
 }
 
 @font-face {
-  font-family: "arcadeclassicregular";
-  src: url("../arcadeclassic-webfont.woff2");
+	font-family: "arcadeclassicregular";
+	src: url("../arcadeclassic-webfont.woff2");
 }

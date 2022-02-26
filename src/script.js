@@ -24,6 +24,7 @@ loader.load(
 	"models/craft_speederA.obj",
 	function (object) {
 		player = object;
+		player.rotation.y = Math.PI;
 		scene.add(player);
 	},
 	function (xhr) {
@@ -168,11 +169,11 @@ const tick = () => {
 	}
 
 	//player rotation
-	if (player.rotation.z < maxRThreshold && pressedKeys[65] == true) {
-		player.rotation.z += rSpeed;
-	}
-	if (player.rotation.z > minRThreshold && pressedKeys[68] == true) {
+	if (player.rotation.z > minRThreshold && pressedKeys[65] == true) {
 		player.rotation.z -= rSpeed;
+	}
+	if (player.rotation.z < maxRThreshold && pressedKeys[68] == true) {
+		player.rotation.z += rSpeed;
 	}
 	if (pressedKeys[68] == false && pressedKeys[65] == false) {
 		//player rotation reset
