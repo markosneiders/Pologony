@@ -132,6 +132,7 @@ var moveDelay = 0.2; //smaller means longer delay
 var moveCount = 0;
 var moveThreshold = 3;
 var moveThing = 1;
+var moveHang = false;
 
 document.addEventListener("keydown", onDocumentKeyDown, false);
 document.addEventListener("keyup", onDocumentKeyUp, false);
@@ -253,7 +254,7 @@ const tick = () => {
 
 	//debug enemy spawn
 	if (pressedKeys[81] == true && canShoot == 0) {
-		spawnEnemyArray(10, 3, -10, 3, -10, 5); //spawnEnemyArray(col, row, innerZ, zSpace, leftX, xSpace)
+		spawnEnemyArray(3, 3, -10, 3, -10, 5); //spawnEnemyArray(col, row, innerZ, zSpace, leftX, xSpace)
 		//spawnEnemy(0, -10);
 		canShoot = 10;
 	}
@@ -265,20 +266,31 @@ const tick = () => {
 
 	//enemy moving logic
 	if (canMove == 0) {
-		enemies.forEach((element, index) => {
-			enemies[index].position.x += moveThing;
-		});
+		if (moveHang == false) {
+			enemies.forEach((element, index) => {
+				enemies[index].position.x += moveThing;
+			});
+		}
 
 		if (moveCount == moveThreshold) {
 			moveCount = 0;
+			moveHang = false;
 			enemies.forEach((element, index) => {
 				enemies[index].position.z += 1;
+				if (enemies[0].position.z == -5) {
+					gameOver();
+				}
 			});
+
 			if (moveThing == 1) {
 				moveThing = -1;
 			} else {
 				moveThing = 1;
 			}
+		}
+		if (moveCount == moveThreshold - 1) {
+			moveHang = true;
+			console.log(moveHang);
 		}
 		moveCount++;
 		canMove = 10;
@@ -286,6 +298,11 @@ const tick = () => {
 
 	//camera follow
 	camera.position.x = player.position.x;
+
+	//check for win
+	if (score == enemies.length && score != 0) {
+		nextWave();
+	}
 
 	// Render
 	renderer.render(scene, camera);
@@ -324,7 +341,7 @@ function spawnEnemy(x, z) {
 				killSound.setBuffer(buffer);
 				killSound.setVolume(0.5);
 				enemy.add(killSound);
-				enemy.position.set(x, 0, z);
+				enemy.position.set(x, 1, z);
 				enemies.push(enemy);
 				scene.add(enemy);
 			},
@@ -343,5 +360,11 @@ function spawnEnemyArray(col, row, innerZ, zSpace, leftX, xSpace) {
 			spawnEnemy((i - leftX) * xSpace + leftX, (j - innerZ) * zSpace + innerZ);
 		}
 	}
+}
+function gameOver() {
+	console.log("Gameover");
+}
+function nextWave() {
+	console.log("next wave");
 }
 tick();
