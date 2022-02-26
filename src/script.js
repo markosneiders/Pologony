@@ -20,9 +20,14 @@ const geometry = new THREE.BoxGeometry();
 const material = new THREE.MeshBasicMaterial();
 material.color = new THREE.Color(0x00ff00);
 
+const bulletMaterial = new THREE.MeshBasicMaterial();
+bulletMaterial.color = new THREE.Color(0xff0000);
+
 // Mesh
 const player = new THREE.Mesh(geometry, material);
 scene.add(player);
+
+const bullet = new THREE.Mesh(geometry, bulletMaterial);
 
 // Lights
 
@@ -72,7 +77,6 @@ scene.add(camera);
 // Controls
 //const controls = new OrbitControls(camera, canvas);
 //controls.enableDamping = true;
-
 var xSpeed = 0.1; //speed at which player moves
 var maxThreshold = 20; // how far right the player can go
 var minThreshold = -20; // how far left the player can go
@@ -142,7 +146,7 @@ function onDocumentKeyDown(event) {
 	} else if (keyCode == 68 && player.position.x < maxThreshold) {
 		xMove = +xSpeed;
 	} else if (keyCode == 32) {
-		player.position.set(0, 0, 0);
+		scene.add(bullet);
 	} else {
 		xMove = 0;
 	}
