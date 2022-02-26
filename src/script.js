@@ -13,23 +13,36 @@ const canvas = document.querySelector("canvas.webgl");
 // Scene
 const scene = new THREE.Scene();
 
+// Objects Definitions
+let player = new THREE.Object3D();
+let enemy = new THREE.Object3D();
+
 // Objects Loader
 const loader = new OBJLoader();
 
-// load a resource
 loader.load(
-	// resource URL
-	"models/enemy.obj",
-	// called when resource is loaded
+	"models/craft_speederA.obj",
 	function (object) {
-		scene.add(object);
-		console.log(object);
+		player = object;
+		scene.add(player);
 	},
-	// called when loading is in progresses
 	function (xhr) {
 		console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
 	},
-	// called when loading has errors
+	function (error) {
+		console.log("An error happened");
+	}
+);
+
+loader.load(
+	"models/enemy.obj",
+	function (object) {
+		enemy = object;
+		scene.add(enemy);
+	},
+	function (xhr) {
+		console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+	},
 	function (error) {
 		console.log("An error happened");
 	}
@@ -48,8 +61,8 @@ enemyMaterial.color = new THREE.Color(0x0000ff);
 enemyMaterial.side = THREE.DoubleSide;
 
 // Mesh
-const player = new THREE.Mesh(geometry, material);
-scene.add(player);
+// const player = new THREE.Mesh(geometry, material);
+// scene.add(player);
 
 var bullets = [];
 var bulletLifetime = 10000;
@@ -248,7 +261,7 @@ function onDocumentKeyUp(event) {
 }
 
 function spawnEnemy() {
-	var enemy = new THREE.Mesh(geometry, enemyMaterial);
+	// var enemy = new THREE.Mesh(geometry, enemyMaterial);
 	enemy.position.set(player.position.x, 0, -10);
 	enemies.push(enemy);
 	scene.add(enemy);
