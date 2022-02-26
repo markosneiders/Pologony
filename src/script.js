@@ -43,9 +43,6 @@ const geometry = new THREE.BoxGeometry();
 const material = new THREE.MeshBasicMaterial();
 material.color = new THREE.Color(0x00ff00);
 
-const bulletMaterial = new THREE.MeshBasicMaterial();
-bulletMaterial.color = new THREE.Color(0xff0000);
-
 const enemyMaterial = new THREE.MeshBasicMaterial();
 enemyMaterial.color = new THREE.Color(0x0000ff);
 enemyMaterial.side = THREE.DoubleSide;
@@ -54,13 +51,10 @@ enemyMaterial.side = THREE.DoubleSide;
 const player = new THREE.Mesh(geometry, material);
 scene.add(player);
 
-const enemy = new THREE.Mesh(geometry, enemyMaterial);
-scene.add(enemy);
-enemy.position.z = -10;
-enemy.position.x = 3;
-
 var bullets = [];
 var bulletLifetime = 10000;
+
+var enemies = [];
 
 // Lights
 
@@ -109,8 +103,10 @@ scene.add(camera);
 
 // Controls
 var pressedKeys = {};
-pressedKeys[68] = false;
+pressedKeys[68] = false; //set key state at start to avoid funky behaviour from undefined
 pressedKeys[65] = false;
+pressedKeys[81] = false;
+
 var xSpeed = 0.1; //speed at which player moves
 var maxThreshold = 20; // how far right the player can go
 var minThreshold = -20; // how far left the player can go
@@ -138,7 +134,6 @@ const gui = new dat.GUI();
 const cameraFolder = gui.addFolder("Camera");
 cameraFolder.add(camera.position, "z").min(0).max(30).step(1);
 cameraFolder.add(camera.position, "y").min(0).max(20).step(1);
-cameraFolder.add(enemy.position, "x").min(-10).max(10).step(0.1);
 
 const tick = () => {
 	//player side movement
@@ -225,6 +220,13 @@ const tick = () => {
 	//shoot delay
 	if (canShoot > 0) canShoot -= shootDelay;
 
+	//debug enemy spawn
+	if (pressedKeys[81] == true && canShoot == 0) {
+		spawnEnemy();
+		console.log("enemy spawned");
+		canShoot = 10;
+	}
+
 	//camera follow
 	camera.position.x = player.position.x;
 
@@ -243,6 +245,13 @@ function onDocumentKeyDown(event) {
 function onDocumentKeyUp(event) {
 	var keyCode = event.which;
 	pressedKeys[keyCode] = false;
+}
+
+function spawnEnemy() {
+	var enemy = new THREE.Mesh(geometry, enemyMaterial);
+	enemy.position.set(player.position.x, 0, -10);
+	enemies.push(enemy);
+	scene.add(enemy);
 }
 
 tick();
