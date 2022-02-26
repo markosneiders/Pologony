@@ -135,6 +135,11 @@ var rSpeed = 0.02; // player rotation speed
 var rReturnSpeed = 0.05; // player rotation return speed
 var canShoot = 0;
 var shootDelay = 0.5; //smaller means longer delay
+var canMove = 0;
+var moveDelay = 0.2; //smaller means longer delay
+var moveCount = 0;
+var moveThreshold = 3;
+var moveThing = 1;
 
 document.addEventListener("keydown", onDocumentKeyDown, false);
 document.addEventListener("keyup", onDocumentKeyUp, false);
@@ -230,7 +235,7 @@ const tick = () => {
       new Vector3(bullets[index].position.x, 0, bullets[index].position.z),
       new Vector3(0, 0, -1)
     );
-    const intersects = raycaster.intersectObjects(enemy.children);
+    const intersects = raycaster.intersectObjects(scene.children, true);
 
     try {
       if (intersects[0].distance < 0.05) {
@@ -239,6 +244,7 @@ const tick = () => {
         const killSound = intersects[0].object.parent.children[2];
         killSound.play();
         scene.remove(intersects[0].object.parent);
+        bullets[index].alive = false;
         scene.remove(bullets[index]);
       }
     } catch (err) {
@@ -250,10 +256,40 @@ const tick = () => {
   if (canShoot > 0) canShoot -= shootDelay;
   if (canShoot < 0) canShoot = 0;
 
+  if (canMove > 0) canMove -= moveDelay;
+  if (canMove < 0) canMove = 0;
+
   //debug enemy spawn
   if (pressedKeys[81] == true && canShoot == 0) {
     spawnEnemyArray(10, 3, -10, 3, -10, 5); //spawnEnemyArray(col, row, innerZ, zSpace, leftX, xSpace)
+    //spawnEnemy(0, -10);
     canShoot = 10;
+  }
+  if (pressedKeys[69] == true && canShoot == 0) {
+    enemies.forEach((element, index) => {
+      enemies[index].position.x += 1;
+    });
+  }
+
+  //enemy moving logic
+  if (canMove == 0) {
+    enemies.forEach((element, index) => {
+      enemies[index].position.x += moveThing;
+    });
+
+    if (moveCount == moveThreshold) {
+      moveCount = 0;
+      enemies.forEach((element, index) => {
+        enemies[index].position.z += 1;
+      });
+      if (moveThing == 1) {
+        moveThing = -1;
+      } else {
+        moveThing = 1;
+      }
+    }
+    moveCount++;
+    canMove = 10;
   }
 
   //camera follow
@@ -281,7 +317,6 @@ function onDocumentKeyUp(event) {
 
 function spawnEnemy(x, z) {
   audioLoader.load("sounds/explosionCrunch_001.ogg", function (buffer) {
-    //var enemy = new THREE.Mesh(geometry, enemyMaterial);
     loader.load(
       "models/enemy.obj",
       function (object) {
@@ -291,7 +326,7 @@ function spawnEnemy(x, z) {
         const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
         var mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(0.5, -1, 1);
-        // mesh.material.visible = false;
+        mesh.material.visible = false;
         enemy.add(mesh);
         const killSound = new THREE.Audio(listener);
         killSound.setBuffer(buffer);
