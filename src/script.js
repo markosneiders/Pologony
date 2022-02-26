@@ -55,8 +55,8 @@ const player = new THREE.Mesh(geometry, material);
 scene.add(player);
 
 var bullets = [];
-var bulletLifetime = 10000;
-
+var bulletLifetime = 5000;
+var bulletVelocity = 0.1;
 var enemies = [];
 
 // Lights
@@ -104,19 +104,11 @@ camera.position.y = 2;
 camera.position.z = 2;
 scene.add(camera);
 
-//Audio loader
+//Audio
 const listener = new THREE.AudioListener();
 camera.add(listener);
 
-// create a global audio source
-const shootSound = new THREE.Audio(listener);
-
-// load a sound and set it as the Audio object's buffer
 const audioLoader = new THREE.AudioLoader();
-audioLoader.load("sounds/laserSmall_000.ogg", function (buffer) {
-  shootSound.setBuffer(buffer);
-  shootSound.setVolume(0.5);
-});
 
 // Controls
 var pressedKeys = {};
@@ -179,18 +171,23 @@ const tick = () => {
   }
   if (pressedKeys[32] == true && canShoot == 0) {
     //space pressed
-
+    audioLoader.load("sounds/laserSmall_000.ogg", function (buffer) {
+      const shootSound = new THREE.Audio(listener);
+      shootSound.setBuffer(buffer);
+      shootSound.setVolume(0.5);
+      shootSound.play(); //play shoot sound
+    });
     // creates a bullet as a Mesh object
     var bullet = new THREE.Mesh(
       new THREE.SphereGeometry(0.05, 8, 8),
-      new THREE.MeshBasicMaterial({ color: 0xffffff })
+      new THREE.MeshBasicMaterial({ color: 0xff0000 })
     );
 
     // position the bullet to come from the player's weapon
     bullet.position.set(player.position.x, 0, 0);
 
     // set the velocity of the bullet
-    bullet.velocity = new THREE.Vector3(0, 0, -0.1);
+    bullet.velocity = new THREE.Vector3(0, 0, -bulletVelocity);
 
     bullet.raycast;
 
@@ -206,7 +203,7 @@ const tick = () => {
     // add to scene, array, and set the delay to 10 frames
     bullets.push(bullet);
     scene.add(bullet);
-    shootSound.play(); //play shoot sound
+
     canShoot = 10;
   }
 
@@ -240,6 +237,7 @@ const tick = () => {
   }
   //shoot delay
   if (canShoot > 0) canShoot -= shootDelay;
+  if (canShoot < 0) canShoot = 0;
 
   //debug enemy spawn
   if (pressedKeys[81] == true && canShoot == 0) {
