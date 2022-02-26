@@ -3,6 +3,7 @@ import * as THREE from "three";
 import * as dat from "dat.gui";
 import { Vector3 } from "three";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
+import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 
 //Ray
 const raycaster = new THREE.Raycaster();
@@ -19,21 +20,28 @@ let enemy = new THREE.Object3D();
 
 // Objects Loader
 const loader = new OBJLoader();
+const mtlLoader = new MTLLoader();
 
-loader.load(
-  "models/craft_speederA.obj",
-  function (object) {
-    player = object;
-    player.rotation.y = Math.PI;
-    scene.add(player);
-  },
-  function (xhr) {
-    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  },
-  function (error) {
-    console.log("An error happened");
-  }
-);
+mtlLoader.load("models/craft_speederA.mtl", function (materials) {
+  materials.preload();
+
+  const objLoader = new OBJLoader();
+  objLoader.setMaterials(materials);
+  objLoader.load(
+    "models/craft_speederA.obj",
+    function (object) {
+      player = object;
+      player.rotation.y = Math.PI;
+      scene.add(player);
+    },
+    function (xhr) {
+      console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    },
+    function (error) {
+      console.log("An error happened");
+    }
+  );
+});
 
 // Objects
 const geometry = new THREE.BoxGeometry();
