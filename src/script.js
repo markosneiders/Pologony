@@ -60,13 +60,17 @@ const enemyMaterial = new THREE.MeshBasicMaterial();
 enemyMaterial.color = new THREE.Color(0x0000ff);
 enemyMaterial.side = THREE.DoubleSide;
 
+// UI elements
+
+let score = 0;
+
 // Mesh
 // const player = new THREE.Mesh(geometry, material);
 // scene.add(player);
 
 var bullets = [];
-var bulletLifetime = 10000;
-
+var bulletLifetime = 5000;
+var bulletVelocity = 0.1;
 var enemies = [];
 
 // Lights
@@ -114,6 +118,12 @@ camera.position.y = 2;
 camera.position.z = 2;
 scene.add(camera);
 
+//Audio
+const listener = new THREE.AudioListener();
+camera.add(listener);
+
+const audioLoader = new THREE.AudioLoader();
+
 // Controls
 var pressedKeys = {};
 pressedKeys[68] = false; //set key state at start to avoid funky behaviour from undefined
@@ -128,7 +138,7 @@ var minRThreshold = -0.3; // how far clockwise the player can rotate
 var rSpeed = 0.02; // player rotation speed
 var rReturnSpeed = 0.05; // player rotation return speed
 var canShoot = 0;
-var shootDelay = 1;
+var shootDelay = 0.5; //smaller means longer delay
 
 document.addEventListener("keydown", onDocumentKeyDown, false);
 document.addEventListener("keyup", onDocumentKeyUp, false);
@@ -175,18 +185,23 @@ const tick = () => {
 	}
 	if (pressedKeys[32] == true && canShoot == 0) {
 		//space pressed
-
+		audioLoader.load("sounds/laserSmall_000.ogg", function (buffer) {
+			const shootSound = new THREE.Audio(listener);
+			shootSound.setBuffer(buffer);
+			shootSound.setVolume(0.5);
+			shootSound.play(); //play shoot sound
+		});
 		// creates a bullet as a Mesh object
 		var bullet = new THREE.Mesh(
 			new THREE.SphereGeometry(0.05, 8, 8),
-			new THREE.MeshBasicMaterial({ color: 0xffffff })
+			new THREE.MeshBasicMaterial({ color: 0xff0000 })
 		);
 
 		// position the bullet to come from the player's weapon
 		bullet.position.set(player.position.x, 0, 0);
 
 		// set the velocity of the bullet
-		bullet.velocity = new THREE.Vector3(0, 0, -0.1);
+		bullet.velocity = new THREE.Vector3(0, 0, -bulletVelocity);
 
 		bullet.raycast;
 
@@ -202,6 +217,7 @@ const tick = () => {
 		// add to scene, array, and set the delay to 10 frames
 		bullets.push(bullet);
 		scene.add(bullet);
+
 		canShoot = 10;
 	}
 
@@ -222,6 +238,9 @@ const tick = () => {
 		try {
 			if (intersects[0].distance < 0.05) {
 				//if raycast distance is smaller than bullet radius
+				score += 1;
+				const killSound = intersects[0].object.children[0];
+				killSound.play();
 				scene.remove(intersects[0].object);
 				scene.remove(bullets[index]);
 			}
@@ -232,6 +251,7 @@ const tick = () => {
 	}
 	//shoot delay
 	if (canShoot > 0) canShoot -= shootDelay;
+	if (canShoot < 0) canShoot = 0;
 
 	//debug enemy spawn
 	if (pressedKeys[81] == true && canShoot == 0) {
@@ -248,6 +268,9 @@ const tick = () => {
 
 	// Call tick again on the next frame
 	window.requestAnimationFrame(tick);
+
+	// Score update
+	document.getElementById("output").innerHTML = score;
 };
 
 //updates key pressed array
@@ -261,10 +284,16 @@ function onDocumentKeyUp(event) {
 }
 
 function spawnEnemy() {
-	// var enemy = new THREE.Mesh(geometry, enemyMaterial);
-	enemy.position.set(player.position.x, 0, -10);
-	enemies.push(enemy);
-	scene.add(enemy);
+	audioLoader.load("sounds/explosionCrunch_001.ogg", function (buffer) {
+		// var enemy = new THREE.Mesh(geometry, enemyMaterial);
+		const killSound = new THREE.Audio(listener);
+		killSound.setBuffer(buffer);
+		killSound.setVolume(0.5);
+		enemy.add(killSound);
+		enemy.position.set(player.position.x, 0, -10);
+		enemies.push(enemy);
+		scene.add(enemy);
+	});
 }
 
 tick();
