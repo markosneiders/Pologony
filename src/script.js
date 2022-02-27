@@ -403,7 +403,7 @@ function spawnEnemy(x, z) {
 				enemy.add(mesh);
 				const killSound = new THREE.Audio(listener);
 				killSound.setBuffer(buffer);
-				killSound.setVolume(0.5);
+				killSound.setVolume(0.2);
 				enemy.add(killSound);
 				enemy.position.set(x, 0.2, z);
 				enemies.push(enemy);
