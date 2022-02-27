@@ -22,9 +22,20 @@ body {
 .textscore {
 	color: lime;
 	text-align: center;
+	margin-top: 0%;
+	font-family: "arcadeclassicregular";
+	font-size: xx-large;
+}
+
+#waves {
+	color: lime;
+	display: flex;
+	justify-content: center;
 	margin-top: 5%;
 	font-family: "arcadeclassicregular";
 	font-size: xx-large;
+	align-items: baseline;
+	padding-bottom: 10px;
 }
 
 .text {

@@ -59,6 +59,7 @@ enemyMaterial.side = THREE.DoubleSide;
 // UI elements
 
 let score = 0;
+let waveCount = 1;
 
 // Mesh
 // const player = new THREE.Mesh(geometry, material);
@@ -346,7 +347,9 @@ const tick = () => {
 		document.getElementById("output").innerHTML = 0;
 		document.getElementById("textPologony").innerHTML = "";
 		document.getElementById("textStart").innerHTML = "";
-		document.getElementById("textScore").innerHTML = "score [1]";
+		document.getElementById("textScore").innerHTML = "score";
+		document.getElementById("waves_text").innerHTML = "Wave: &nbsp;";
+		document.getElementById("waves_num").innerHTML = waveCount;
 	}
 	//check for win
 	if (score == enemies.length && score != 0) {
