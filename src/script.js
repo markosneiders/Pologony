@@ -70,11 +70,11 @@ var bulletLifetime = 5000;
 var bulletVelocity = 0.5;
 var enemies = [];
 var enemyScale = 0.2;
-var enemyShootDelay = 0.1;
+var enemyShootDelay = 0.1; //larger is faster fire rate
 var enemyCanShoot = 0;
 var enemyBulletVelocity = 0.5;
 var enemyMoveTime = 5; //In seconds
-var moveThreshold = 10; //enemy moving amount
+var moveThreshold = -15; //enemy moving amount
 
 // Lights
 
@@ -147,8 +147,8 @@ pressedKeys[65] = false;
 pressedKeys[81] = false;
 
 var xSpeed = 0.1; //speed at which player moves
-var maxThreshold = 20; // how far right the player can go
-var minThreshold = -20; // how far left the player can go
+var maxThreshold = 100; // how far right the player can go
+var minThreshold = -100; // how far left the player can go
 var maxRThreshold = 0.3; // how far counter clockwise the player can rotate
 var minRThreshold = -0.3; // how far clockwise the player can rotate
 var rSpeed = 0.02; // player rotation speed
@@ -295,7 +295,7 @@ const tick = () => {
 
 	//debug enemy spawn
 	if (pressedKeys[81] == true && canShoot == 0) {
-		spawnEnemyArray(3, 3, -10, 3, -10, 5); //spawnEnemyArray(col, row, innerZ, zSpace, leftX, xSpace)
+		spawnEnemyArray(6, 3, -10, 3, -22.5, 5); //spawnEnemyArray(col, row, innerZ, zSpace, leftX, xSpace)
 		//spawnEnemy(0, -10);
 		canShoot = 10;
 	}
@@ -322,6 +322,9 @@ const tick = () => {
 						easing: TWEEN.Easing.Linear.None,
 					}
 				);
+				if (enemies[index].position.z > -3) {
+					gameOver();
+				}
 			});
 			moveThreshold = -moveThreshold;
 		}
@@ -457,8 +460,10 @@ function nextWave() {
 	score = 0;
 	document.getElementById("output").innerHTML = score;
 	enemies = [];
+	enemyShootDelay = enemyShootDelay * 1.5;
 	setTimeout(function () {
-		spawnEnemyArray(3, 3, -10, 3, -10, 5);
+		moveThreshold = -15;
+		spawnEnemyArray(6, 2 + waveCount, -10, 3, -22.5, 5);
 	}, 3000);
 	document.getElementById("tets").style.opacity = 0.7;
 	// change fire rate
@@ -468,7 +473,7 @@ function nextWave() {
 function cameraIntro() {
 	setTimeout(function () {
 		controlLock = false;
-		spawnEnemyArray(3, 3, -10, 3, -10, 5);
+		spawnEnemyArray(6, 3, -10, 3, -22.5, 5);
 	}, 5000);
 
 	animateVector3(camera.position, cameraPositionTarget, {
