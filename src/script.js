@@ -71,8 +71,8 @@ var enemyScale = 0.5;
 
 // Lights
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-scene.add(ambientLight);
+const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0.5);
+scene.add(hemisphereLight);
 
 /**
  * Sizes
@@ -327,7 +327,8 @@ function onDocumentKeyUp(event) {
 
 function spawnEnemy(x, z) {
 	audioLoader.load("sounds/explosionCrunch_001.ogg", function (buffer) {
-		loader.load(
+		const objLoader = new OBJLoader();
+		objLoader.load(
 			"models/enemy.obj",
 			function (object) {
 				enemy = object;
