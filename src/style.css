@@ -71,7 +71,8 @@ body {
 }
 .tets {
 	background-color: lime;
-	margin-left: 45%;
+	margin-left: 35%;
+	margin-bottom: 100%;
 	position: absolute;
 	height: 300px;
 	width: 30%;
