@@ -70,13 +70,13 @@ body {
 	animation: fade 5s linear;
 }
 .tets {
-	background-color: aqua;
+	background-color: lime;
 	margin-left: 45%;
 	position: absolute;
 	height: 300px;
 	width: 30%;
 	align-self: center;
-	opacity: 0%;
+	opacity: 0;
 }
 
 @keyframes fade {
@@ -108,4 +108,7 @@ body {
 
 .button {
 	cursor: pointer;
+	padding-right: 3%;
+	text-align: right;
+	padding-top: 45%;
 }
