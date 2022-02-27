@@ -1,6 +1,7 @@
 import "./style.css";
 import * as THREE from "three";
 import * as dat from "dat.gui";
+import * as TWEEN from "@tweenjs/tween.js";
 import { Vector3 } from "three";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
@@ -107,9 +108,12 @@ const camera = new THREE.PerspectiveCamera(
 	1000
 );
 camera.position.x = 0;
-camera.position.y = 2;
-camera.position.z = 2;
+camera.position.y = 25;
+camera.position.z = 30;
+camera.rotation.x = -1.14;
 scene.add(camera);
+var cameraPositionTarget = new THREE.Vector3(0, 3, 5); // create on init
+var cameraRotationTarget = new THREE.Vector3(0, 0, 0); // create on init
 
 //Audio
 const listener = new THREE.AudioListener();
@@ -154,10 +158,13 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 //GUI debug stuff
 const gui = new dat.GUI();
 const cameraFolder = gui.addFolder("Camera");
-cameraFolder.add(camera.position, "z").min(0).max(30).step(1);
-cameraFolder.add(camera.position, "y").min(0).max(20).step(1);
+cameraFolder.add(camera.position, "x").min(-20).max(20).step(1);
+cameraFolder.add(camera.position, "y").min(-5).max(40).step(1);
+cameraFolder.add(camera.position, "z").min(0).max(40).step(1);
+cameraFolder.add(camera.rotation, "x").min(-2).max(2).step(0.01);
 
 const tick = () => {
+	TWEEN.update();
 	//player side movement
 	if (player.position.x < maxThreshold && pressedKeys[68] == true) {
 		player.position.x += xSpeed;
@@ -180,6 +187,9 @@ const tick = () => {
 		}
 		if (player.rotation.z < 0) {
 			player.rotation.z += rReturnSpeed;
+		}
+		if (player.rotation.z < 0.05 && player.rotation.z > -0.05) {
+			player.rotation.z = 0;
 		}
 	}
 	if (pressedKeys[32] == true && canShoot == 0) {
@@ -292,6 +302,7 @@ const tick = () => {
 		}
 		if (moveCount == moveThreshold - 1) {
 			moveHang = true;
+			console.log(moveHang);
 		}
 		moveCount++;
 		canMove = 10;
@@ -300,6 +311,9 @@ const tick = () => {
 	//camera follow
 	camera.position.x = player.position.x;
 
+	if (pressedKeys[88] == true) {
+		cameraIntro();
+	}
 	//check for win
 	if (score == enemies.length && score != 0) {
 		nextWave();
@@ -369,4 +383,41 @@ function gameOver() {
 function nextWave() {
 	console.log("next wave");
 }
+function cameraIntro() {
+	animateVector3(camera.position, cameraPositionTarget, {
+		duration: 5000,
+
+		easing: TWEEN.Easing.Quadratic.InOut,
+	});
+	animateVector3(camera.rotation, cameraRotationTarget, {
+		duration: 5000,
+
+		easing: TWEEN.Easing.Quadratic.InOut,
+	});
+}
+function animateVector3(vectorToAnimate, cameraPositionTarget, options) {
+	options = options || {};
+	// get targets from options or set to defaults
+	var to = cameraPositionTarget || THREE.Vector3(),
+		easing = options.easing || TWEEN.Easing.Quadratic.In,
+		duration = options.duration || 2000;
+	// create the tween
+	var tweenVector3 = new TWEEN.Tween(vectorToAnimate)
+		.to({ x: to.x, y: to.y, z: to.z }, duration)
+		.easing(easing)
+		.onUpdate(function (d) {
+			if (options.update) {
+				options.update(d);
+			}
+		})
+		.onComplete(function () {
+			if (options.callback) options.callback();
+		});
+	// start the tween
+	tweenVector3.start();
+	// return the tween in case we want to manipulate it later on
+	return tweenVector3;
+}
+/* How to use */
+
 tick();
