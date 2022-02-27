@@ -360,7 +360,7 @@ const tick = () => {
 		document.getElementById("textStart").innerHTML = "";
 		document.getElementById("textScore").innerHTML = "score";
 		document.getElementById("waves_text").innerHTML = "Wave: &nbsp;";
-		document.getElementById("waves_num").innerHTML = waveCount;
+		document.getElementById("waves_num").innerHTML = 0;
 	}
 	//check for win
 	if (score == enemies.length && score != 0) {
@@ -447,8 +447,13 @@ function gameOver() {
 }
 function nextWave() {
 	console.log("next wave");
-	enemies = [];
-	score = 0;
+	setTimeout(function () {
+		waveCount += 1;
+		document.getElementById("waves_num").innerHTML = waveCount;
+		score = 0;
+		document.getElementById("output").innerHTML = score;
+		enemies = [];
+	}, 1000);
 }
 function cameraIntro() {
 	setTimeout(function () {
