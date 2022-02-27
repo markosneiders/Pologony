@@ -68,7 +68,7 @@ var bullets = [];
 var bulletLifetime = 5000;
 var bulletVelocity = 0.5;
 var enemies = [];
-var enemyScale = 0.5;
+var enemyScale = 0.2;
 
 // Lights
 
@@ -243,7 +243,8 @@ const tick = () => {
 		const intersects = raycaster.intersectObjects(scene.children, true);
 
 		try {
-			if (intersects[0].distance < 0.05) {
+			console.log(intersects[0].distance);
+			if (intersects[0].distance < 0.4) {
 				//if raycast distance is smaller than bullet radius
 				score += 1;
 				const killSound = intersects[0].object.parent.children[2];
@@ -347,7 +348,7 @@ function spawnEnemy(x, z) {
 			function (object) {
 				enemy = object;
 				enemy.scale.set(enemyScale, enemyScale, enemyScale);
-				const geometry = new THREE.BoxGeometry(10.3, 7.8, 0.5);
+				const geometry = new THREE.BoxGeometry(10.3, 7.8, 10);
 				const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
 				var mesh = new THREE.Mesh(geometry, material);
 				mesh.position.set(0.5, -1, 1);
@@ -357,7 +358,7 @@ function spawnEnemy(x, z) {
 				killSound.setBuffer(buffer);
 				killSound.setVolume(0.5);
 				enemy.add(killSound);
-				enemy.position.set(x, 1, z);
+				enemy.position.set(x, 0.2, z);
 				enemies.push(enemy);
 				scene.add(enemy);
 			},
