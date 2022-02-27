@@ -6,27 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <title>Pologony</title>
+    <script>
+      var fireRate = 0;
+      incFireRate = () => {
+        console.log("pressed list");
+      }
+    </script>
   </head>
   <body>
     <canvas class="webgl"></canvas>
       <p class="textscore" id="textScore"></p>
       <p class="text" id="output"></p>
-
     <p class="Level" id="textPologony">P o lo g o n y</p>
     <div class="tets">
-      <p>Hello world</p>
-      <button>gdh</button>
+      <ul class="lists">
+        <li onclick="console.log(fireRate)">Fire Rate</li>
+        <li>hello2</li>
+      </ul>
     </div>
     <p class="Level" style="font-size: 50px" id="textStart">Press space to start</p>
-
-
-    <script>
-      const menuBtn = document.getElementById("open_menu_btn");
-
-      menuBtn.onclick = () => {
-        console.log("hello")
-      }
-    </script>
-    
   </body>
 </html>

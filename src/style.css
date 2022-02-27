@@ -75,3 +75,17 @@ body {
 		opacity: 1;
 	}
 }
+
+.lists {
+	text-align: center;
+	columns: 2;
+	list-style: none;
+	padding-top: 4%;
+	cursor: pointer;
+	position: absolute;
+	font-family: "arcadeclassicregular";
+}
+
+.button {
+	cursor: pointer;
+}
