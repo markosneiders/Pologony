@@ -133,6 +133,8 @@ audioLoader.load("sounds/space_song.ogg", function (buffer) {
 	mainSoundtrack.play();
 });
 
+//Clock
+
 // Controls
 var pressedKeys = {};
 pressedKeys[68] = false; //set key state at start to avoid funky behaviour from undefined
@@ -153,6 +155,7 @@ var moveDelay = 0.2; //smaller means longer delay
 var moveCount = 0;
 var moveThreshold = 3;
 var moveThing = 1;
+var moveDirection = true; //true = right
 var moveHang = false;
 var controlLock = true;
 var introLock = false;
@@ -176,6 +179,8 @@ cameraFolder.add(camera.position, "x").min(-20).max(20).step(1);
 cameraFolder.add(camera.position, "y").min(-5).max(40).step(1);
 cameraFolder.add(camera.position, "z").min(0).max(40).step(1);
 cameraFolder.add(camera.rotation, "x").min(-2).max(2).step(0.01);
+
+var clock = new THREE.Clock();
 
 const tick = () => {
 	TWEEN.update();
@@ -293,14 +298,21 @@ const tick = () => {
 		//spawnEnemy(0, -10);
 		canShoot = 10;
 	}
-
 	//enemy moving logic
 	try {
-		animateVector3(enemies[0].position, (0, 5, -10), {
-			duration: 5000,
+		animateVector3(
+			enemies[index].position,
+			new THREE.Vector3(
+				enemies[index].position.x + moveThreshold,
+				enemies[index].position.y,
+				enemies[index].position.z
+			),
+			{
+				duration: 5000,
 
-			easing: TWEEN.Easing.Quadratic.InOut,
-		});
+				easing: TWEEN.Easing.Linear.none,
+			}
+		);
 	} catch {
 		null;
 	}
@@ -419,13 +431,11 @@ function cameraIntro() {
 		duration: 5000,
 
 		easing: TWEEN.Easing.Quadratic.InOut,
-		rep: 3,
 	});
 	animateVector3(camera.rotation, cameraRotationTarget, {
 		duration: 5000,
 
 		easing: TWEEN.Easing.Quadratic.InOut,
-		rep: 3,
 	});
 }
 function animateVector3(vectorToAnimate, cameraPositionTarget, options) {
@@ -438,7 +448,7 @@ function animateVector3(vectorToAnimate, cameraPositionTarget, options) {
 	var tweenVector3 = new TWEEN.Tween(vectorToAnimate)
 		.to({ x: to.x, y: to.y, z: to.z }, duration)
 		.easing(easing)
-		.repeat(options.rep)
+		.repeat(options.repeat)
 		.onUpdate(function (d) {
 			if (options.update) {
 				options.update(d);
