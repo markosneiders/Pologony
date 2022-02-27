@@ -446,10 +446,8 @@ function gameOver() {
 	});
 	setTimeout(function () {
 		enemies = [];
-		// enemies.forEach((element, index) => {
-		// 	scene.remove(enemies[index].object);
-		// });
-	}, 1000);
+		window.location.reload();
+	}, 5000);
 	waveCount = 1;
 }
 function nextWave() {
