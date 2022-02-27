@@ -264,6 +264,8 @@ const tick = () => {
 					scene.remove(intersects[0].object.parent);
 					bullets[index].alive = false;
 					scene.remove(bullets[index]);
+					// Score update
+					document.getElementById("output").innerHTML = score;
 				} else {
 					if (intersects[0].object.parent.name != "enemy") {
 						gameOver();
@@ -349,6 +351,11 @@ const tick = () => {
 	if (pressedKeys[32] == true && introLock == false) {
 		cameraIntro();
 		introLock = true;
+		// Score update
+		document.getElementById("output").innerHTML = 0;
+		document.getElementById("textPologony").innerHTML = "";
+		document.getElementById("textStart").innerHTML = "";
+		document.getElementById("textScore").innerHTML = "score [1]";
 	}
 	//check for win
 	if (score == enemies.length && score != 0) {
@@ -360,9 +367,6 @@ const tick = () => {
 
 	// Call tick again on the next frame
 	window.requestAnimationFrame(tick);
-
-	// Score update
-	document.getElementById("output").innerHTML = score;
 };
 
 //updates key pressed array
