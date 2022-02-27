@@ -24,24 +24,24 @@ const loader = new OBJLoader();
 const mtlLoader = new MTLLoader();
 
 mtlLoader.load("models/craft_speederA.mtl", function (materials) {
-    materials.preload();
+	materials.preload();
 
-    const objLoader = new OBJLoader();
-    objLoader.setMaterials(materials);
-    objLoader.load(
-        "models/craft_speederA.obj",
-        function (object) {
-            player = object;
-            player.rotation.y = Math.PI;
-            scene.add(player);
-        },
-        function (xhr) {
-            console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-        },
-        function (error) {
-            console.log("An error happened");
-        }
-    );
+	const objLoader = new OBJLoader();
+	objLoader.setMaterials(materials);
+	objLoader.load(
+		"models/craft_speederA.obj",
+		function (object) {
+			player = object;
+			player.rotation.y = Math.PI;
+			scene.add(player);
+		},
+		function (xhr) {
+			console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+		},
+		function (error) {
+			console.log("An error happened");
+		}
+	);
 });
 
 // Objects
@@ -82,22 +82,22 @@ scene.add(hemisphereLight);
  * Sizes
  */
 const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight,
+	width: window.innerWidth,
+	height: window.innerHeight,
 };
 
 window.addEventListener("resize", () => {
-    // Update sizes
-    sizes.width = window.innerWidth;
-    sizes.height = window.innerHeight;
+	// Update sizes
+	sizes.width = window.innerWidth;
+	sizes.height = window.innerHeight;
 
-    // Update camera
-    camera.aspect = sizes.width / sizes.height;
-    camera.updateProjectionMatrix();
+	// Update camera
+	camera.aspect = sizes.width / sizes.height;
+	camera.updateProjectionMatrix();
 
-    // Update renderer
-    renderer.setSize(sizes.width, sizes.height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+	// Update renderer
+	renderer.setSize(sizes.width, sizes.height);
+	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
 /**
@@ -105,10 +105,10 @@ window.addEventListener("resize", () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(
-    90,
-    sizes.width / sizes.height,
-    0.1,
-    1000
+	90,
+	sizes.width / sizes.height,
+	0.1,
+	1000
 );
 camera.position.x = 0;
 camera.position.y = 25;
@@ -126,11 +126,11 @@ const audioLoader = new THREE.AudioLoader();
 
 // Music
 audioLoader.load("sounds/space_song.ogg", function (buffer) {
-    const mainSoundtrack = new THREE.Audio(listener);
-    mainSoundtrack.setBuffer(buffer);
-    mainSoundtrack.setVolume(0.2);
-    mainSoundtrack.setLoop(true);
-    mainSoundtrack.play();
+	const mainSoundtrack = new THREE.Audio(listener);
+	mainSoundtrack.setBuffer(buffer);
+	mainSoundtrack.setVolume(0.2);
+	mainSoundtrack.setLoop(true);
+	mainSoundtrack.play();
 });
 
 // Controls
@@ -163,8 +163,8 @@ document.addEventListener("keyup", onDocumentKeyUp, false);
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
-    canvas: canvas,
-    alpha: true,
+	canvas: canvas,
+	alpha: true,
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -178,327 +178,327 @@ cameraFolder.add(camera.position, "z").min(0).max(40).step(1);
 cameraFolder.add(camera.rotation, "x").min(-2).max(2).step(0.01);
 
 const tick = () => {
-    TWEEN.update();
-    //player side movement
-    if (
-        player.position.x < maxThreshold &&
-        pressedKeys[68] == true &&
-        controlLock == false
-    ) {
-        player.position.x += xSpeed;
-    }
-    if (
-        player.position.x > minThreshold &&
-        pressedKeys[65] == true &&
-        controlLock == false
-    ) {
-        player.position.x -= xSpeed;
-    }
+	TWEEN.update();
+	//player side movement
+	if (
+		player.position.x < maxThreshold &&
+		pressedKeys[68] == true &&
+		controlLock == false
+	) {
+		player.position.x += xSpeed;
+	}
+	if (
+		player.position.x > minThreshold &&
+		pressedKeys[65] == true &&
+		controlLock == false
+	) {
+		player.position.x -= xSpeed;
+	}
 
-    //player rotation
-    if (
-        player.rotation.z > minRThreshold &&
-        pressedKeys[65] == true &&
-        controlLock == false
-    ) {
-        player.rotation.z -= rSpeed;
-    }
-    if (
-        player.rotation.z < maxRThreshold &&
-        pressedKeys[68] == true &&
-        controlLock == false
-    ) {
-        player.rotation.z += rSpeed;
-    }
-    if (pressedKeys[68] == false && pressedKeys[65] == false) {
-        //player rotation reset
-        if (player.rotation.z > 0) {
-            player.rotation.z -= rReturnSpeed;
-        }
-        if (player.rotation.z < 0) {
-            player.rotation.z += rReturnSpeed;
-        }
-        if (player.rotation.z < 0.05 && player.rotation.z > -0.05) {
-            player.rotation.z = 0;
-        }
-    }
-    if (pressedKeys[32] == true && canShoot == 0 && controlLock == false) {
-        //space pressed
-        spawnBullet(
-            -bulletVelocity,
-            player.position.x,
-            player.position.z,
-            false
-        );
-        canShoot = 10;
-    }
+	//player rotation
+	if (
+		player.rotation.z > minRThreshold &&
+		pressedKeys[65] == true &&
+		controlLock == false
+	) {
+		player.rotation.z -= rSpeed;
+	}
+	if (
+		player.rotation.z < maxRThreshold &&
+		pressedKeys[68] == true &&
+		controlLock == false
+	) {
+		player.rotation.z += rSpeed;
+	}
+	if (pressedKeys[68] == false && pressedKeys[65] == false) {
+		//player rotation reset
+		if (player.rotation.z > 0) {
+			player.rotation.z -= rReturnSpeed;
+		}
+		if (player.rotation.z < 0) {
+			player.rotation.z += rReturnSpeed;
+		}
+		if (player.rotation.z < 0.05 && player.rotation.z > -0.05) {
+			player.rotation.z = 0;
+		}
+	}
+	if (pressedKeys[32] == true && canShoot == 0 && controlLock == false) {
+		//space pressed
+		spawnBullet(
+			-bulletVelocity,
+			player.position.x,
+			player.position.z,
+			false
+		);
+		canShoot = 10;
+	}
 
-    // go through bullets array and update position
-    // remove bullets when appropriate
-    for (var index = 0; index < bullets.length; index += 1) {
-        if (bullets[index] === undefined) continue;
-        if (bullets[index].alive == false) {
-            bullets.splice(index, 1);
-            continue;
-        }
-        var ray = new THREE.Raycaster();
-        raycaster.set(
-            new Vector3(
-                bullets[index].position.x,
-                0,
-                bullets[index].position.z
-            ),
-            new Vector3(0, 0, -1)
-        );
-        const intersects = raycaster.intersectObjects(scene.children, true);
+	// go through bullets array and update position
+	// remove bullets when appropriate
+	for (var index = 0; index < bullets.length; index += 1) {
+		if (bullets[index] === undefined) continue;
+		if (bullets[index].alive == false) {
+			bullets.splice(index, 1);
+			continue;
+		}
+		var ray = new THREE.Raycaster();
+		raycaster.set(
+			new Vector3(
+				bullets[index].position.x,
+				0,
+				bullets[index].position.z
+			),
+			new Vector3(0, 0, -1)
+		);
+		const intersects = raycaster.intersectObjects(scene.children, true);
 
-        try {
-            if (intersects[0].distance < 0.4) {
-                //if raycast distance is smaller than bullet radius
+		try {
+			if (intersects[0].distance < 0.4) {
+				//if raycast distance is smaller than bullet radius
 
-                if (bullets[index].en == false) {
-                    score += 1;
-                    intersects[0].object.parent.alive = false;
-                    const killSound = intersects[0].object.parent.children[2];
-                    killSound.play();
-                    scene.remove(intersects[0].object.parent);
-                    bullets[index].alive = false;
-                    scene.remove(bullets[index]);
-                } else {
-                    if (intersects[0].object.parent.name != "enemy") {
-                        gameOver();
-                    }
-                }
-            }
-        } catch (err) {
-            null;
-        }
-        bullets[index].position.add(bullets[index].velocity);
-    }
-    //shoot delay
-    if (canShoot > 0) canShoot -= shootDelay;
-    if (canShoot < 0) canShoot = 0;
+				if (bullets[index].en == false) {
+					score += 1;
+					intersects[0].object.parent.alive = false;
+					const killSound = intersects[0].object.parent.children[2];
+					killSound.play();
+					scene.remove(intersects[0].object.parent);
+					bullets[index].alive = false;
+					scene.remove(bullets[index]);
+				} else {
+					if (intersects[0].object.parent.name != "enemy") {
+						gameOver();
+					}
+				}
+			}
+		} catch (err) {
+			null;
+		}
+		bullets[index].position.add(bullets[index].velocity);
+	}
+	//shoot delay
+	if (canShoot > 0) canShoot -= shootDelay;
+	if (canShoot < 0) canShoot = 0;
 
-    if (canMove > 0) canMove -= moveDelay;
-    if (canMove < 0) canMove = 0;
+	if (canMove > 0) canMove -= moveDelay;
+	if (canMove < 0) canMove = 0;
 
-    if (enemyCanShoot > 0) enemyCanShoot -= enemyShootDelay;
-    if (enemyCanShoot < 0) enemyCanShoot = 0;
+	if (enemyCanShoot > 0) enemyCanShoot -= enemyShootDelay;
+	if (enemyCanShoot < 0) enemyCanShoot = 0;
 
-    //debug enemy spawn
-    if (pressedKeys[81] == true && canShoot == 0) {
-        spawnEnemyArray(3, 3, -10, 3, -10, 5); //spawnEnemyArray(col, row, innerZ, zSpace, leftX, xSpace)
-        //spawnEnemy(0, -10);
-        canShoot = 10;
-    }
+	//debug enemy spawn
+	if (pressedKeys[81] == true && canShoot == 0) {
+		spawnEnemyArray(3, 3, -10, 3, -10, 5); //spawnEnemyArray(col, row, innerZ, zSpace, leftX, xSpace)
+		//spawnEnemy(0, -10);
+		canShoot = 10;
+	}
 
-    //enemy moving logic
-    if (canMove == 0) {
-        if (moveHang == false) {
-            enemies.forEach((element, index) => {
-                enemies[index].position.x += moveThing;
-            });
-        }
+	//enemy moving logic
+	if (canMove == 0) {
+		if (moveHang == false) {
+			enemies.forEach((element, index) => {
+				enemies[index].position.x += moveThing;
+			});
+		}
 
-        if (moveCount == moveThreshold) {
-            moveCount = 0;
-            moveHang = false;
-            enemies.forEach((element, index) => {
-                enemies[index].position.z += 1;
-                if (enemies[0].position.z == -5) {
-                    gameOver();
-                }
-            });
+		if (moveCount == moveThreshold) {
+			moveCount = 0;
+			moveHang = false;
+			enemies.forEach((element, index) => {
+				enemies[index].position.z += 1;
+				if (enemies[0].position.z == -5) {
+					gameOver();
+				}
+			});
 
-            if (moveThing == 1) {
-                moveThing = -1;
-            } else {
-                moveThing = 1;
-            }
-        }
-        if (moveCount == moveThreshold - 1) {
-            moveHang = true;
-            console.log(moveHang);
-        }
-        moveCount++;
-        canMove = 10;
-    }
+			if (moveThing == 1) {
+				moveThing = -1;
+			} else {
+				moveThing = 1;
+			}
+		}
+		if (moveCount == moveThreshold - 1) {
+			moveHang = true;
+			console.log(moveHang);
+		}
+		moveCount++;
+		canMove = 10;
+	}
 
-    //Enemy shooting
-    if (enemyCanShoot == 0) {
-        let x = Math.floor(Math.random() * (enemies.length - 0) + 0);
-        try {
-            if (enemies[x].alive == true) {
-                spawnBullet(
-                    enemyBulletVelocity,
-                    enemies[x].position.x,
-                    enemies[x].position.z + 0.7,
-                    true
-                );
-            }
-        } catch {
-            null;
-        }
+	//Enemy shooting
+	if (enemyCanShoot == 0) {
+		let x = Math.floor(Math.random() * (enemies.length - 0) + 0);
+		try {
+			if (enemies[x].alive == true) {
+				spawnBullet(
+					enemyBulletVelocity,
+					enemies[x].position.x,
+					enemies[x].position.z + 0.7,
+					true
+				);
+			}
+		} catch {
+			null;
+		}
 
-        enemyCanShoot = 10;
-    }
+		enemyCanShoot = 10;
+	}
 
-    //camera follow
-    camera.position.x = player.position.x;
+	//camera follow
+	camera.position.x = player.position.x;
 
-    if (pressedKeys[32] == true && introLock == false) {
-        cameraIntro();
-        introLock = true;
-    }
-    //check for win
-    if (score == enemies.length && score != 0) {
-        nextWave();
-    }
+	if (pressedKeys[32] == true && introLock == false) {
+		cameraIntro();
+		introLock = true;
+	}
+	//check for win
+	if (score == enemies.length && score != 0) {
+		nextWave();
+	}
 
-    // Render
-    renderer.render(scene, camera);
+	// Render
+	renderer.render(scene, camera);
 
-    // Call tick again on the next frame
-    window.requestAnimationFrame(tick);
+	// Call tick again on the next frame
+	window.requestAnimationFrame(tick);
 
-    // Score update
-    document.getElementById("output").innerHTML = score;
+	// Score update
+	document.getElementById("output").innerHTML = score;
 };
 
 //updates key pressed array
 function onDocumentKeyDown(event) {
-    var keyCode = event.which;
-    pressedKeys[keyCode] = true;
+	var keyCode = event.which;
+	pressedKeys[keyCode] = true;
 }
 function onDocumentKeyUp(event) {
-    var keyCode = event.which;
-    pressedKeys[keyCode] = false;
+	var keyCode = event.which;
+	pressedKeys[keyCode] = false;
 }
 
 function spawnEnemy(x, z) {
-    audioLoader.load("sounds/explosionCrunch_001.ogg", function (buffer) {
-        loader.load(
-            "models/enemy.obj",
-            function (object) {
-                enemy = object;
-                enemy.scale.set(enemyScale, enemyScale, enemyScale);
-                const geometry = new THREE.BoxGeometry(10.3, 7.8, 0.5);
-                const material = new THREE.MeshBasicMaterial({
-                    color: 0xffff00,
-                });
-                var mesh = new THREE.Mesh(geometry, material);
-                mesh.position.set(0.5, -1, 1);
-                mesh.material.visible = false;
-                enemy.alive = true;
-                enemy.name = "enemy";
-                enemy.add(mesh);
-                const killSound = new THREE.Audio(listener);
-                killSound.setBuffer(buffer);
-                killSound.setVolume(0.5);
-                enemy.add(killSound);
-                enemy.position.set(x, 0.2, z);
-                enemies.push(enemy);
-                scene.add(enemy);
-            },
-            function (xhr) {
-                console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-            },
-            function (error) {
-                console.log("An error happened");
-            }
-        );
-    });
+	audioLoader.load("sounds/explosionCrunch_001.ogg", function (buffer) {
+		loader.load(
+			"models/enemy.obj",
+			function (object) {
+				enemy = object;
+				enemy.scale.set(enemyScale, enemyScale, enemyScale);
+				const geometry = new THREE.BoxGeometry(10.3, 7.8, 0.5);
+				const material = new THREE.MeshBasicMaterial({
+					color: 0xffff00,
+				});
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.position.set(0.5, -1, 1);
+				mesh.material.visible = false;
+				enemy.alive = true;
+				enemy.name = "enemy";
+				enemy.add(mesh);
+				const killSound = new THREE.Audio(listener);
+				killSound.setBuffer(buffer);
+				killSound.setVolume(0.5);
+				enemy.add(killSound);
+				enemy.position.set(x, 0.2, z);
+				enemies.push(enemy);
+				scene.add(enemy);
+			},
+			function (xhr) {
+				console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+			},
+			function (error) {
+				console.log("An error happened");
+			}
+		);
+	});
 }
 function spawnEnemyArray(col, row, innerZ, zSpace, leftX, xSpace) {
-    for (let i = leftX; i < col + leftX; i++) {
-        for (let j = innerZ; j > innerZ - row; j--) {
-            spawnEnemy(
-                (i - leftX) * xSpace + leftX,
-                (j - innerZ) * zSpace + innerZ
-            );
-        }
-    }
+	for (let i = leftX; i < col + leftX; i++) {
+		for (let j = innerZ; j > innerZ - row; j--) {
+			spawnEnemy(
+				(i - leftX) * xSpace + leftX,
+				(j - innerZ) * zSpace + innerZ
+			);
+		}
+	}
 }
 function gameOver() {
-    console.log("Gameover");
+	console.log("Gameover");
 }
 function nextWave() {
-    console.log("next wave");
-    enemies = [];
-    score = 0;
+	console.log("next wave");
+	enemies = [];
+	score = 0;
 }
 function cameraIntro() {
-    setTimeout(function () {
-        controlLock = false;
-    }, 5000);
+	setTimeout(function () {
+		controlLock = false;
+	}, 5000);
 
-    animateVector3(camera.position, cameraPositionTarget, {
-        duration: 5000,
+	animateVector3(camera.position, cameraPositionTarget, {
+		duration: 5000,
 
-        easing: TWEEN.Easing.Quadratic.InOut,
-    });
-    animateVector3(camera.rotation, cameraRotationTarget, {
-        duration: 5000,
+		easing: TWEEN.Easing.Quadratic.InOut,
+	});
+	animateVector3(camera.rotation, cameraRotationTarget, {
+		duration: 5000,
 
-        easing: TWEEN.Easing.Quadratic.InOut,
-    });
+		easing: TWEEN.Easing.Quadratic.InOut,
+	});
 }
 function animateVector3(vectorToAnimate, cameraPositionTarget, options) {
-    options = options || {};
-    // get targets from options or set to defaults
-    var to = cameraPositionTarget || THREE.Vector3(),
-        easing = options.easing || TWEEN.Easing.Quadratic.In,
-        duration = options.duration || 2000;
-    // create the tween
-    var tweenVector3 = new TWEEN.Tween(vectorToAnimate)
-        .to({ x: to.x, y: to.y, z: to.z }, duration)
-        .easing(easing)
-        .onUpdate(function (d) {
-            if (options.update) {
-                options.update(d);
-            }
-        })
-        .onComplete(function () {
-            if (options.callback) options.callback();
-        });
-    // start the tween
-    tweenVector3.start();
-    // return the tween in case we want to manipulate it later on
-    return tweenVector3;
+	options = options || {};
+	// get targets from options or set to defaults
+	var to = cameraPositionTarget || THREE.Vector3(),
+		easing = options.easing || TWEEN.Easing.Quadratic.In,
+		duration = options.duration || 2000;
+	// create the tween
+	var tweenVector3 = new TWEEN.Tween(vectorToAnimate)
+		.to({ x: to.x, y: to.y, z: to.z }, duration)
+		.easing(easing)
+		.onUpdate(function (d) {
+			if (options.update) {
+				options.update(d);
+			}
+		})
+		.onComplete(function () {
+			if (options.callback) options.callback();
+		});
+	// start the tween
+	tweenVector3.start();
+	// return the tween in case we want to manipulate it later on
+	return tweenVector3;
 }
 function spawnBullet(bV, x, z, enm) {
-    audioLoader.load("sounds/laserSmall_000.ogg", function (buffer) {
-        const shootSound = new THREE.Audio(listener);
-        shootSound.setBuffer(buffer);
-        shootSound.setVolume(0.5);
-        shootSound.play(); //play shoot sound
-        // Game start update
-        document.getElementById("textPologony").innerHTML = "";
-        document.getElementById("textStart").innerHTML = "";
-    });
-    // creates a bullet as a Mesh object
-    var bullet = new THREE.Mesh(
-        new THREE.BoxGeometry(0.1, 0.1, 1),
-        new THREE.MeshBasicMaterial({ color: 0xff0000 })
-    );
+	audioLoader.load("sounds/laserSmall_000.ogg", function (buffer) {
+		const shootSound = new THREE.Audio(listener);
+		shootSound.setBuffer(buffer);
+		shootSound.setVolume(0.5);
+		shootSound.play(); //play shoot sound
+		// Game start update
+		document.getElementById("textPologony").innerHTML = "";
+		document.getElementById("textStart").innerHTML = "";
+	});
+	// creates a bullet as a Mesh object
+	var bullet = new THREE.Mesh(
+		new THREE.BoxGeometry(0.1, 0.1, 1),
+		new THREE.MeshBasicMaterial({ color: 0xff0000 })
+	);
 
-    // position the bullet to come from the player's weapon
-    bullet.position.set(x, 0, z);
+	// position the bullet to come from the player's weapon
+	bullet.position.set(x, 0, z);
 
-    // set the velocity of the bullet
-    bullet.velocity = new THREE.Vector3(0, 0, bV);
+	// set the velocity of the bullet
+	bullet.velocity = new THREE.Vector3(0, 0, bV);
 
-    bullet.raycast;
-    bullet.en = enm;
+	bullet.raycast;
+	bullet.en = enm;
 
-    bullet.alive = true;
-    setTimeout(function () {
-        bullet.alive = false;
-        scene.remove(bullet);
-    }, bulletLifetime);
+	bullet.alive = true;
+	setTimeout(function () {
+		bullet.alive = false;
+		scene.remove(bullet);
+	}, bulletLifetime);
 
-    // add to scene, array, and set the delay to 10 frames
-    bullets.push(bullet);
-    scene.add(bullet);
+	// add to scene, array, and set the delay to 10 frames
+	bullets.push(bullet);
+	scene.add(bullet);
 }
 tick();
