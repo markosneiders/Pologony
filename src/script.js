@@ -293,35 +293,14 @@ const tick = () => {
 	}
 
 	//enemy moving logic
-	if (canMove == 0) {
-		if (moveHang == false) {
-			enemies.forEach((element, index) => {
-				enemies[index].position.x += moveThing;
-			});
-		}
+	try {
+		animateVector3(enemies[0].position, (0, 5, -10), {
+			duration: 5000,
 
-		if (moveCount == moveThreshold) {
-			moveCount = 0;
-			moveHang = false;
-			enemies.forEach((element, index) => {
-				enemies[index].position.z += 1;
-				if (enemies[0].position.z == -5) {
-					gameOver();
-				}
-			});
-
-			if (moveThing == 1) {
-				moveThing = -1;
-			} else {
-				moveThing = 1;
-			}
-		}
-		if (moveCount == moveThreshold - 1) {
-			moveHang = true;
-			console.log(moveHang);
-		}
-		moveCount++;
-		canMove = 10;
+			easing: TWEEN.Easing.Quadratic.InOut,
+		});
+	} catch {
+		null;
 	}
 
 	//Enemy shooting
@@ -436,11 +415,13 @@ function cameraIntro() {
 		duration: 5000,
 
 		easing: TWEEN.Easing.Quadratic.InOut,
+		rep: 3,
 	});
 	animateVector3(camera.rotation, cameraRotationTarget, {
 		duration: 5000,
 
 		easing: TWEEN.Easing.Quadratic.InOut,
+		rep: 3,
 	});
 }
 function animateVector3(vectorToAnimate, cameraPositionTarget, options) {
@@ -453,6 +434,7 @@ function animateVector3(vectorToAnimate, cameraPositionTarget, options) {
 	var tweenVector3 = new TWEEN.Tween(vectorToAnimate)
 		.to({ x: to.x, y: to.y, z: to.z }, duration)
 		.easing(easing)
+		.repeat(options.rep)
 		.onUpdate(function (d) {
 			if (options.update) {
 				options.update(d);

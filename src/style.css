@@ -58,6 +58,14 @@ body {
 	opacity: 1;
 	animation: fade 5s linear;
 }
+.tets {
+	background-color: aqua;
+	margin-left: 45%;
+	position: absolute;
+	height: 300px;
+	width: 30%;
+	align-self: center;
+}
 
 @keyframes fade {
 	0% {
