@@ -443,18 +443,20 @@ function gameOver() {
 	});
 	setTimeout(function () {
 		enemies = [];
+		// enemies.forEach((element, index) => {
+		// 	scene.remove(enemies[index].object);
+		// });
 	}, 1000);
 	waveCount = 1;
 }
 function nextWave() {
 	console.log("next wave");
-	setTimeout(function () {
-		waveCount += 1;
-		document.getElementById("waves_num").innerHTML = waveCount;
-		score = 0;
-		document.getElementById("output").innerHTML = score;
-		enemies = [];
-	}, 1000);
+	waveCount += 1;
+	console.log(waveCount);
+	document.getElementById("waves_num").innerHTML = waveCount;
+	score = 0;
+	document.getElementById("output").innerHTML = score;
+	enemies = [];
 }
 function cameraIntro() {
 	setTimeout(function () {
