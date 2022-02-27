@@ -293,12 +293,6 @@ const tick = () => {
 	if (enemyCanShoot > 0) enemyCanShoot -= enemyShootDelay;
 	if (enemyCanShoot < 0) enemyCanShoot = 0;
 
-	//debug enemy spawn
-	if (pressedKeys[81] == true && canShoot == 0) {
-		spawnEnemyArray(6, 3, -10, 3, -22.5, 5); //spawnEnemyArray(col, row, innerZ, zSpace, leftX, xSpace)
-		//spawnEnemy(0, -10);
-		canShoot = 10;
-	}
 	//enemy moving logic
 	try {
 		if (
