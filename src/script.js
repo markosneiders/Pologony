@@ -69,6 +69,9 @@ var bulletLifetime = 5000;
 var bulletVelocity = 0.5;
 var enemies = [];
 var enemyScale = 0.2;
+var enemyShootDelay = 0.1;
+var enemyCanShoot = 0;
+var enemyBulletVelocity = 0.5;
 
 // Lights
 
@@ -220,39 +223,7 @@ const tick = () => {
 	}
 	if (pressedKeys[32] == true && canShoot == 0 && controlLock == false) {
 		//space pressed
-		audioLoader.load("sounds/laserSmall_000.ogg", function (buffer) {
-			const shootSound = new THREE.Audio(listener);
-			shootSound.setBuffer(buffer);
-			shootSound.setVolume(0.5);
-			shootSound.play(); //play shoot sound
-			// Game start update
-			document.getElementById("textPologony").innerHTML = "";
-			document.getElementById("textStart").innerHTML = "";
-		});
-		// creates a bullet as a Mesh object
-		var bullet = new THREE.Mesh(
-			new THREE.BoxGeometry(0.1, 0.1, 1),
-			new THREE.MeshBasicMaterial({ color: 0xff0000 })
-		);
-
-		// position the bullet to come from the player's weapon
-		bullet.position.set(player.position.x, 0, 0);
-
-		// set the velocity of the bullet
-		bullet.velocity = new THREE.Vector3(0, 0, -bulletVelocity);
-
-		bullet.raycast;
-
-		bullet.alive = true;
-		setTimeout(function () {
-			bullet.alive = false;
-			scene.remove(bullet);
-		}, bulletLifetime);
-
-		// add to scene, array, and set the delay to 10 frames
-		bullets.push(bullet);
-		scene.add(bullet);
-
+		spawnBullet(-bulletVelocity, player.position.x, player.position.z, false);
 		canShoot = 10;
 	}
 
@@ -274,12 +245,20 @@ const tick = () => {
 		try {
 			if (intersects[0].distance < 0.4) {
 				//if raycast distance is smaller than bullet radius
-				score += 1;
-				const killSound = intersects[0].object.parent.children[2];
-				killSound.play();
-				scene.remove(intersects[0].object.parent);
-				bullets[index].alive = false;
-				scene.remove(bullets[index]);
+
+				if (bullets[index].en == false) {
+					score += 1;
+					intersects[0].object.parent.alive = false;
+					const killSound = intersects[0].object.parent.children[2];
+					killSound.play();
+					scene.remove(intersects[0].object.parent);
+					bullets[index].alive = false;
+					scene.remove(bullets[index]);
+				} else {
+					if (intersects[0].object.parent.name != "enemy") {
+						gameOver();
+					}
+				}
 			}
 		} catch (err) {
 			null;
@@ -292,6 +271,9 @@ const tick = () => {
 
 	if (canMove > 0) canMove -= moveDelay;
 	if (canMove < 0) canMove = 0;
+
+	if (enemyCanShoot > 0) enemyCanShoot -= enemyShootDelay;
+	if (enemyCanShoot < 0) enemyCanShoot = 0;
 
 	//debug enemy spawn
 	if (pressedKeys[81] == true && canShoot == 0) {
@@ -330,6 +312,25 @@ const tick = () => {
 		}
 		moveCount++;
 		canMove = 10;
+	}
+
+	//Enemy shooting
+	if (enemyCanShoot == 0) {
+		let x = Math.floor(Math.random() * (enemies.length - 0) + 0);
+		try {
+			if (enemies[x].alive == true) {
+				spawnBullet(
+					enemyBulletVelocity,
+					enemies[x].position.x,
+					enemies[x].position.z + 0.7,
+					true
+				);
+			}
+		} catch {
+			null;
+		}
+
+		enemyCanShoot = 10;
 	}
 
 	//camera follow
@@ -378,6 +379,8 @@ function spawnEnemy(x, z) {
 				var mesh = new THREE.Mesh(geometry, material);
 				mesh.position.set(0.5, -1, 1);
 				mesh.material.visible = false;
+				enemy.alive = true;
+				enemy.name = "enemy";
 				enemy.add(mesh);
 				const killSound = new THREE.Audio(listener);
 				killSound.setBuffer(buffer);
@@ -408,6 +411,8 @@ function gameOver() {
 }
 function nextWave() {
 	console.log("next wave");
+	enemies = [];
+	score = 0;
 }
 function cameraIntro() {
 	setTimeout(function () {
@@ -448,6 +453,39 @@ function animateVector3(vectorToAnimate, cameraPositionTarget, options) {
 	// return the tween in case we want to manipulate it later on
 	return tweenVector3;
 }
-/* How to use */
+function spawnBullet(bV, x, z, enm) {
+	audioLoader.load("sounds/laserSmall_000.ogg", function (buffer) {
+		const shootSound = new THREE.Audio(listener);
+		shootSound.setBuffer(buffer);
+		shootSound.setVolume(0.5);
+		shootSound.play(); //play shoot sound
+		// Game start update
+		document.getElementById("textPologony").innerHTML = "";
+		document.getElementById("textStart").innerHTML = "";
+	});
+	// creates a bullet as a Mesh object
+	var bullet = new THREE.Mesh(
+		new THREE.BoxGeometry(0.1, 0.1, 1),
+		new THREE.MeshBasicMaterial({ color: 0xff0000 })
+	);
 
+	// position the bullet to come from the player's weapon
+	bullet.position.set(x, 0, z);
+
+	// set the velocity of the bullet
+	bullet.velocity = new THREE.Vector3(0, 0, bV);
+
+	bullet.raycast;
+	bullet.en = enm;
+
+	bullet.alive = true;
+	setTimeout(function () {
+		bullet.alive = false;
+		scene.remove(bullet);
+	}, bulletLifetime);
+
+	// add to scene, array, and set the delay to 10 frames
+	bullets.push(bullet);
+	scene.add(bullet);
+}
 tick();
