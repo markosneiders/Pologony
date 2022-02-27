@@ -116,10 +116,12 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.x = 0;
 camera.position.y = 25;
 camera.position.z = 30;
-camera.rotation.x = -1.14;
+camera.rotation.x = -1.6;
 scene.add(camera);
 var cameraPositionTarget = new THREE.Vector3(0, 3, 5); // create on init
 var cameraRotationTarget = new THREE.Vector3(0, 0, 0); // create on init
+var cameraPositionStart = new THREE.Vector3(0, 25, 30); // create on init
+var cameraRotationStart = new THREE.Vector3(-1.6, 0, 0); // create on init
 
 //Audio
 const listener = new THREE.AudioListener();
@@ -299,7 +301,10 @@ const tick = () => {
 	}
 	//enemy moving logic
 	try {
-		if (Math.floor(clock.getElapsedTime() / enemyMoveTime) != newClock) {
+		if (
+			Math.floor(clock.getElapsedTime() / enemyMoveTime) != newClock &&
+			controlLock == false
+		) {
 			newClock = Math.floor(clock.getElapsedTime() / enemyMoveTime);
 			console.log(moveThreshold);
 			enemies.forEach((element, index) => {
@@ -325,7 +330,7 @@ const tick = () => {
 	}
 
 	//Enemy shooting
-	if (enemyCanShoot == 0) {
+	if (enemyCanShoot == 0 && controlLock == false) {
 		let x = Math.floor(Math.random() * (enemies.length - 0) + 0);
 		try {
 			if (enemies[x].alive == true) {
@@ -425,6 +430,20 @@ function spawnEnemyArray(col, row, innerZ, zSpace, leftX, xSpace) {
 }
 function gameOver() {
 	console.log("Gameover");
+	controlLock = true;
+	animateVector3(camera.position, cameraPositionStart, {
+		duration: 5000,
+
+		easing: TWEEN.Easing.Quadratic.InOut,
+	});
+	animateVector3(camera.rotation, cameraRotationStart, {
+		duration: 5000,
+
+		easing: TWEEN.Easing.Quadratic.InOut,
+	});
+	setTimeout(function () {
+		enemies = [];
+	}, 1000);
 }
 function nextWave() {
 	console.log("next wave");
