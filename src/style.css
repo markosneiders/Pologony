@@ -88,15 +88,6 @@ body {
 	}
 }
 
-@keyframes fadein {
-	0% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 0;
-	}
-}
-
 .lists {
 	text-align: center;
 	list-style: none;
