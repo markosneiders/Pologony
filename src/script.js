@@ -457,10 +457,14 @@ function nextWave() {
 	score = 0;
 	document.getElementById("output").innerHTML = score;
 	enemies = [];
+	setTimeout(function () {
+		spawnEnemyArray(3, 3, -10, 3, -10, 5);
+	}, 3000);
 }
 function cameraIntro() {
 	setTimeout(function () {
 		controlLock = false;
+		spawnEnemyArray(3, 3, -10, 3, -10, 5);
 	}, 5000);
 
 	animateVector3(camera.position, cameraPositionTarget, {
