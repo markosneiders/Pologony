@@ -72,6 +72,8 @@ var enemyScale = 0.2;
 var enemyShootDelay = 0.1;
 var enemyCanShoot = 0;
 var enemyBulletVelocity = 0.5;
+var enemyMoveTime = 5; //In seconds
+var moveThreshold = 10; //enemy moving amount
 
 // Lights
 
@@ -152,11 +154,6 @@ var canShoot = 0;
 var shootDelay = 0.5; //smaller means longer delay
 var canMove = 0;
 var moveDelay = 0.2; //smaller means longer delay
-var moveCount = 0;
-var moveThreshold = 3;
-var moveThing = 1;
-var moveDirection = true; //true = right
-var moveHang = false;
 var controlLock = true;
 var introLock = false;
 
@@ -181,6 +178,7 @@ cameraFolder.add(camera.position, "z").min(0).max(40).step(1);
 cameraFolder.add(camera.rotation, "x").min(-2).max(2).step(0.01);
 
 var clock = new THREE.Clock();
+var newClock = 0;
 
 const tick = () => {
 	TWEEN.update();
@@ -300,19 +298,27 @@ const tick = () => {
 	}
 	//enemy moving logic
 	try {
-		animateVector3(
-			enemies[index].position,
-			new THREE.Vector3(
-				enemies[index].position.x + moveThreshold,
-				enemies[index].position.y,
-				enemies[index].position.z
-			),
-			{
-				duration: 5000,
+		if (Math.floor(clock.getElapsedTime() / enemyMoveTime) != newClock) {
+			newClock = Math.floor(clock.getElapsedTime() / enemyMoveTime);
+			console.log(moveThreshold);
+			enemies.forEach((element, index) => {
+				enemies[index].position.z += 1;
+				animateVector3(
+					enemies[index].position,
+					new THREE.Vector3(
+						enemies[index].position.x + moveThreshold,
+						enemies[index].position.y,
+						enemies[index].position.z
+					),
+					{
+						duration: enemyMoveTime * 1000,
 
-				easing: TWEEN.Easing.Linear.none,
-			}
-		);
+						easing: TWEEN.Easing.Linear.None,
+					}
+				);
+			});
+			moveThreshold = -moveThreshold;
+		}
 	} catch {
 		null;
 	}
