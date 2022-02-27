@@ -20,7 +20,7 @@ body {
 }
 
 .textscore {
-  color: white;
+  color: lime;
   text-align: center;
   margin-top: 5%;
   font-family: "arcadeclassicregular";
@@ -28,7 +28,7 @@ body {
 }
 
 .text {
-  color: white;
+  color: lime;
   text-align: center;
   margin-top: 0%;
   font-family: "arcadeclassicregular";
@@ -49,7 +49,7 @@ body {
 
 .Level {
   text-size-adjust: 200%;
-  color: white;
+  color: lime;
   text-align: center;
   margin-top: 5%;
   font-family: "arcadeclassicregular";

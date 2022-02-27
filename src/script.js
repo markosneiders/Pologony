@@ -121,6 +121,14 @@ camera.add(listener);
 
 const audioLoader = new THREE.AudioLoader();
 
+// Music
+audioLoader.load("sounds/rickroll.ogg", function (buffer) {
+  const rickrollSound = new THREE.Audio(listener);
+  rickrollSound.setBuffer(buffer);
+  rickrollSound.setVolume(0.5);
+  rickrollSound.play(); //play shoot sound
+});
+
 // Controls
 var pressedKeys = {};
 pressedKeys[68] = false; //set key state at start to avoid funky behaviour from undefined
