@@ -360,7 +360,7 @@ const tick = () => {
 		document.getElementById("textStart").innerHTML = "";
 		document.getElementById("textScore").innerHTML = "score";
 		document.getElementById("waves_text").innerHTML = "Wave: &nbsp;";
-		document.getElementById("waves_num").innerHTML = 0;
+		document.getElementById("waves_num").innerHTML = waveCount;
 	}
 	//check for win
 	if (score == enemies.length && score != 0) {
@@ -444,6 +444,7 @@ function gameOver() {
 	setTimeout(function () {
 		enemies = [];
 	}, 1000);
+	waveCount = 1;
 }
 function nextWave() {
 	console.log("next wave");
