@@ -460,6 +460,10 @@ function nextWave() {
 	setTimeout(function () {
 		spawnEnemyArray(3, 3, -10, 3, -10, 5);
 	}, 3000);
+	document.getElementById("tets").style.opacity = 0.7;
+	// change fire rate
+	shootDelay =
+		shootDelay + Number(document.getElementById("fireRateMulti").innerHTML);
 }
 function cameraIntro() {
 	setTimeout(function () {

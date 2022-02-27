@@ -76,6 +76,7 @@ body {
 	height: 300px;
 	width: 30%;
 	align-self: center;
+	opacity: 0%;
 }
 
 @keyframes fade {
@@ -89,12 +90,11 @@ body {
 
 .lists {
 	text-align: center;
-	columns: 2;
 	list-style: none;
 	padding-top: 4%;
 	cursor: pointer;
-	position: absolute;
 	font-family: "arcadeclassicregular";
+	columns: 4;
 }
 
 .button {
